@@ -66,6 +66,16 @@
 var startDate = new Date(2024, 9, 24); // 原始排班循环的开始日期
 var offsetDays = 0; // 用于调整计算的天数偏移
 
+// 页面加载时，从 localStorage 中读取偏移量
+window.onload = function() {
+    var savedOffset = localStorage.getItem('offsetDays');
+    if (savedOffset !== null) {
+        offsetDays = parseInt(savedOffset);
+        document.getElementById("customResult").innerHTML = "已从上次设置中恢复。";
+    }
+    calculateShift();
+}
+
 function calculateShift() {
     var currentDate = new Date();
     // 只保留日期部分
@@ -96,6 +106,8 @@ function setCustomDay() {
     // 计算新的偏移量
     var currentCycleDay = daysDiff % 4 + 1;
     offsetDays = (inputDay - currentCycleDay + 4) % 4;
+    // 将偏移量保存到 localStorage
+    localStorage.setItem('offsetDays', offsetDays);
     // 显示确认信息
     document.getElementById("customResult").innerHTML = "已将今天设为第 " + inputDay + " 天。";
     // 更新结果
